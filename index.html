@@ -83,18 +83,35 @@ hr.sep{border:0;border-top:1px dashed rgba(148,163,184,.25);margin:16px 0}
   <header class="hero">
     <div class="wrap hero-inner">
       <div>
-        <h1 class="title">Avenger Island</h1>
-        <p class="sub">A brand new nation discovered by <strong>Explorer <span id="explorerName">[Your Name]</span></strong></p>
+        <h1 class="title">🌟 Avenger Island</h1>
+        <p class="sub">A brand new nation discovered by <strong>Explorer <span id="explorerName">Lachie Day</span></strong> 🧭</p>
         <nav class="nav" aria-label="Section navigation">
-          <a href="#flag">Flag & Name</a>
-          <a href="#map">Map</a>
-          <a href="#identity">Identity</a>
-          <a href="#geography">Geography</a>
-          <a href="#design">Design & Infrastructure</a>
+          <a href="#flag">🏳️ Flag & Name</a>
+          <a href="#map">🗺️ Map</a>
+          <a href="#identity">🧑‍🤝‍🧑 Identity</a>
+          <a href="#geography">🏔️ Geography</a>
+          <a href="#design">🛠️ Design</a>
         </nav>
       </div>
-      <div class="flag-card">
-        <span class="badge">National Flag</span>
+      
+    </div>
+  </header>
+
+  <main class="wrap Avenger Island" id="content">
+    <!-- ============= FLAG & NAME ============= -->
+    <section id="flag" class="grid cols-2">
+      <article class="card">
+        <h2>🏳️ Country Name & Meaning</h2>
+        <p><strong>Avenger Island</strong> is named after heroes who help people. The name reminds us to be brave and kind. 🛡️❤️</p>
+        <div class="kv"><b>🏙️ Capital City</b><span><strong>Stark City</strong> (east coast)</span></div>
+        <div class="kv"><b>🗣️ Motto</b><span>“Stronger Together.” 🤝</span></div>
+        <div class="kv"><b>💰 Currency</b><span><strong>Stark Shekels (STK)</strong> — the money used in shops and on trains. 🚆</span></div>
+        <div class="kv"><b>🐾 National Animal</b><span><strong>Panthera</strong> — fast, quiet and protective.</span></div>
+      </article>
+
+      <article class="card">
+        <div class="flag-card">
+        <span class="badge">National Flag 🏳️</span>
         <!-- Original flag design (SVG) -->
         <div class="flag" aria-label="Flag of Avenger Island">
           <svg viewBox="0 0 300 200" role="img">
@@ -114,122 +131,108 @@ hr.sep{border:0;border-top:1px dashed rgba(148,163,184,.25);margin:16px 0}
           </svg>
         </div>
       </div>
-    </div>
-  </header>
-
-  <main class="wrap Avenger Island" id="content">
-    <!-- ============= FLAG & NAME ============= -->
-    <section id="flag" class="grid cols-2">
-      <article class="card">
-        <h2>Country Name & Meaning</h2>
-        <p><strong>Avenger Island</strong> is named after heroes who help people. The name reminds us to be brave and kind.</p>
-        <div class="kv"><b>Capital City</b><span><strong>Stark City</strong> (east coast)</span></div>
-        <div class="kv"><b>Motto</b><span>“Stronger Together.”</span></div>
-        <div class="kv"><b>Currency</b><span><strong>Stark Shekels (STK)</strong> — the money used in shops and on trains.</span></div>
-        <div class="kv"><b>National Animal</b><span><strong>Panthera</strong> — fast, quiet and protective.</span></div>
-      </article>
-
-      <article class="card">
-        <h2>Why these Symbols?</h2>
-        <p>The <em>lightning</em> is for Thor. The <em>blue circle</em> is for Iron Man’s power. The <em>star</em> is for Captain America. The colours red, blue and gold show hope and courage.</p>
+        <h2>🔰 Why these Symbols?</h2>
+        <p>⚡ The <em>lightning</em> is for <strong>Thor</strong>. 🔵 The <em>blue circle</em> is for <strong>Iron Man</strong>’s power. ⭐ The <em>star</em> is for <strong>Captain America</strong>. 🎨 The colours red, blue and gold show hope and courage.</p>
       </article>
     </section>
 
- <!-- ============= MAP (image version) ============= -->
-<section id="map">
-  <h2>Official Map of Avenger Island</h2>
-  <div class="map-card map-wrap">
-    <div>
-      <!-- Replace the src below with your image file path -->
-      <img
-        src="images/avenger-island-map.jpg"
-        alt="Hand-drawn map of Avenger Island showing mountains, rivers, cities and a compass."
-        style="width:100%;height:auto;border-radius:14px;display:block;background:#0b2545"
-      />
-      <p class="small">This is the hand-drawn map by Lachie. It shows the island shape, cities, and a compass.</p>
-    </div>
+    <!-- ============= MAP (image version) ============= -->
+    <section id="map">
+      <h2>🗺️ Official Map of Avenger Island</h2>
+      <div class="map-card map-wrap">
+        <div>
+          <!-- Replace the src below with your image file path -->
+          <img
+            src="images/Lachie map.jpg"
+            alt="Hand-drawn map of Avenger Island showing mountains, rivers, cities and a compass."
+            style="width:100%;height:auto;border-radius:14px;display:block;background:#0b2545"
+          />
+           </div>
 
-    <!-- OPTIONAL: Keep this if the drawing doesn’t include a key/compass -->
-    <aside class="map-legend" aria-label="Map key">
-      <h3 style="margin:0 0 6px">Map Key</h3>
-      <div class="legend-row"><span class="swatch" style="background:#14532d"></span> Land</div>
-      <div class="legend-row"><span class="swatch" style="background:#60a5fa"></span> Rivers & Lakes</div>
-      <div class="legend-row"><span class="swatch" style="background:#e5e7eb"></span> Cold Zone (North)</div>
-      <div class="legend-row"><span class="swatch" style="background:#22c55e"></span> Temperate Zone (Centre)</div>
-      <div class="legend-row"><span class="swatch" style="background:#f59e0b"></span> Tropical Zone (South)</div>
-      <div class="legend-row"><span class="dot" style="background:#fbbf24;border:1px solid #fff"></span> Cities</div>
-      <div class="legend-row"><span class="swatch" style="background:transparent;border-style:dashed"></span> Regional Borders</div>
-      <hr class="sep">
-      <div class="legend-row">⛰ Hulk Ridge • ⛰ Jotun Peaks • ⛰ Panthera Hills</div>
-      <div class="legend-row">★ Capital: Stark City</div>
-      <p class="small">If Lachie drew a key and compass on the map, you can delete this legend box.</p>
-    </aside>
-  </div>
-</section>
+        
+
+<!-- Map Key for hand-drawn map -->
+<aside class="map-legend" aria-label="Map key">
+  <h3 style="margin:0 0 6px">🧭 Map Key</h3>
+  <ul style="margin:0;padding-left:18px;font-size:14px;line-height:1.6">
+    <li>🟩 Green = Land</li>
+    <li>💧 Blue = Rivers & Lakes</li>
+    <li>❄️ Light Blue = Snowy North</li>
+    <li>🌤️ Light Green = Farms in the Middle</li>
+    <li>🌴 Yellow = Tropical South</li>
+
+    <li>⛰️ Hulk Ridge (mountains)</li>
+    <li>🧊 Jotun Peaks (mountains)</li>
+    <li>🐾 Panthera Hills (mountains)</li>
+    <li>★ = Capital City (Stark City)</li>
+  </ul>
+</aside>
+        </aside>
+      </div>
+    </section>
 
     <!-- ============= IDENTITY ============= -->
     <section id="identity" class="grid cols-2">
       <article class="card">
-        <h2>Culture</h2>
-        <p>People try to be brave, kind and fair like the Avengers. Kids like to dress up as their favourite heroes. There are parades with music and fireworks.</p>
+        <h2>🧑‍🤝‍🧑 Culture</h2>
+        <p>People try to be brave, kind and fair like the Avengers. 🦸‍♂️ Kids dress up as their favourite heroes. 🎆 There are parades with music and fireworks.</p>
 
-        <h2>Language</h2>
-        <p>People on Avenger Island speak English. They sometimes use hero words like “assemble” when they want everyone to come together, or “smash it” to wish someone good luck.</p>
+        <h2>🗣️ Language</h2>
+        <p>People speak English. They use hero words like “assemble” to call everyone together, or “smash it” for good luck. 💬</p>
       </article>
 
       <article class="card">
-        <h2>Food</h2>
-        <p>People eat shawarma (like in the movie), bagels, fruit from the farms, and honey cakes from New Asgard. Families share big meals on weekends.</p>
+        <h2>🍽️ Food</h2>
+        <p>Shawarma (team favourite) 🌯, bagels 🥯, fruit from farms 🍎🍌, and honey cakes from New Asgard 🍰. Families share big meals on weekends. 👨‍👩‍👧‍👦</p>
 
-        <h2>Clothing & Celebrations</h2>
-        <p>Everyday clothes are comfy with red, blue and gold. On special days people wear capes and star pins. The biggest party is <strong>Founders’ Day</strong> with lanterns shaped like shields, hammers, webs and panthers.</p>
+        <h2>👕 Clothing & 🎉 Celebrations</h2>
+        <p>Everyday clothes are comfy with red, blue and gold. 🧥 On special days people wear capes and star pins. 🦸 The biggest party is <strong>Founders’ Day</strong> with lanterns shaped like shields 🛡️, hammers ⚒️, webs 🕸️ and panthers 🐾.</p>
       </article>
     </section>
 
     <!-- ============= GEOGRAPHY ============= -->
     <section id="geography" class="grid cols-2">
       <article class="card">
-        <h2>Climate</h2>
-        <p>The north is cold and sometimes snowy. The middle is sunny and good for farms. The south is warm and tropical with beaches.</p>
+        <h2>🌦️ Climate</h2>
+        <p>North = cold and sometimes snowy ❄️. Middle = sunny and good for farms 🌾. South = warm, tropical and beachy 🏖️.</p>
 
-        <h2>Natural Features</h2>
-        <p>There is <strong>Hulk Ridge</strong> (big mountains), the <strong>Heartstream River</strong>, two bright <strong>Unity Lakes</strong>, the <strong>Panthera Forest</strong>, and the tall <strong>Asgard Cliffs</strong>.</p>
+        <h2>🏞️ Natural Features</h2> 
+<p><strong>Hulk Ridge</strong> ⛰️ (big mountains in the west), <strong>Jotun Peaks</strong> 🧊 (snowy tops in the north), <strong>Panthera Hills</strong> 🐾 (green hills in the east), and the tall <strong>Asgard Cliffs</strong> ⛰️ (at the south). The <strong>Heartstream River</strong> 💧 runs through the middle</p>
+
       </article>
 
       <article class="card">
-        <h2>Where People Live</h2>
-        <p>Most people live in <strong>Stark City</strong> near schools and hospitals. Some live at <strong>New Asgard Harbor</strong> to fish. Rangers live near the <strong>Panthera Preserve</strong> to look after animals.</p>
+        <h2>🏘️ Where People Live</h2>
+        <p>Most people live in <strong>Stark City</strong> 🏙️ near schools and hospitals. Some live at <strong>New Asgard Harbor</strong> ⚓ to fish. Rangers live near the <strong>Panthera Preserve</strong> 🐾 to look after animals.</p>
       </article>
     </section>
 
-    <!-- ============= INFRASTRUCTURE & DESIGN (2 needs) ============= -->
-    <section id="design" class="grid cols-2">
-      <article class="card">
-        <h2>Need 1: Energy</h2>
-        <h3>Our Solution</h3>
-        <p>We use clean power from sun, wind and waves. Big batteries near the lakes store extra power. This idea was inspired by Iron Man and Black Panther.</p>
-      </article>
+<!-- ============= INFRASTRUCTURE & DESIGN ============= -->
+<section id="design" class="grid cols-2">
+  <div class="card" style="grid-column:1/-1">
+    <h2>Infrastructure & Design</h2>
+    <p class="small">How our country runs: energy ⚡ and transport 🚆.</p>
+  </div>
 
-      <article class="card">
-        <h2>Need 2: Transport</h2>
-        <h3>Our Solution</h3>
-        <p><strong>StormRail</strong> is a fast train that goes from the mountains to the sea. In towns there are <strong>WebWays</strong> (safe bridges and bike paths) that look like Spider-Man’s webs. This helps everyone get to school, markets and beaches.</p>
-      </article>
-    </section>
+  <article class="card">
+    <h3>🔌 Energy</h3>
+    <p>People get power from the sun ☀️, wind 🌬️ and water 🌊. Big batteries 🔋 keep the lights on at night.
+      <strong>Iron Man</strong> 🤖 thought of the idea, and <strong>Black Panther</strong> 🐾 helped make it safe for nature.</p>
+  </article>
 
-    <!-- ============= SHORT WRITING LINKING GEO TO LIFE ============= -->
-    <section class="card">
-      <h2>How Geography Helps Us</h2>
-      <p>The river and lakes give us water and power, so towns are close to them. The warm south is good for beaches and fruit. The flat middle makes it easy to build the train.</p>
-    </section>
+  <article class="card">
+    <h3>🚆 Transport</h3>
+    <p><strong>StormRail</strong> is a fast train that goes across the island. <strong>Thor</strong> ⚡ opened it with a lightning show.
+      In towns there are <strong>WebWays</strong> 🕸️ (safe bridges and paths). <strong>Spider-Man</strong> 🕷️ showed people how to build them.
+      <strong>Captain America</strong> 🛡️ made sure everyone can use them fairly, and <strong>Hulk</strong> 💪 lifted the heavy parts.</p>
+  </article>
+</section>
 
-    <!-- ============= LORE (short + kid voice) ============= -->
-    <section class="card">
-      <h2>Hero Inspiration</h2>
-      <p><strong>Hulk</strong> = strength, <strong>Spider-Man</strong> = helping neighbours, <strong>Iron Man</strong> = inventions, <strong>Thor</strong> = courage, <strong>Captain America</strong> = fairness, <strong>Black Panther</strong> = caring for nature.</p>
-    </section>
 
     <footer>
-      <p>© Avenger Island — Student Project. Original map and flag created for school use.</p>
+      <p>© Avenger Island By Lachie Day
+         📚</p>
     </footer>
   </main>
+</body>
+</html>
