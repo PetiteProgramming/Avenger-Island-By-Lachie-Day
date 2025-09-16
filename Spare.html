@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Avenger Island — Class Presentation</title>
+  <meta name="description" content="A fun, Avengers-inspired single-page site to present Avenger Island in class. Includes a stylised 'A' island map, heroes roster, holidays, and anthem." />
+  <style>
+    :root{
+      --ink:#0b1220;           /* text */
+      --bg:#fffefb;            /* page */
+      --muted:#5b6b7c;         /* muted text */
+      --card:#ffffff;          /* cards */
+      --blue:#1e40af;          /* heroic blue */
+      --red:#dc2626;           /* assemble red */
+      --gold:#f59e0b;          /* arc gold */
+      --green:#16a34a;         /* gamma green */
+      --cyan:#21c4d3;          /* repulsor cyan */
+      --radius:20px;           /* rounded */
+      --shadow:0 12px 30px rgba(0,0,0,.10);
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0; font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
+      color:var(--ink);
+      background:
+        radial-gradient(1100px 560px at -10% -10%, rgba(30,64,175,.10), transparent 60%),
+        radial-gradient(900px 520px at 110% -10%, rgba(220,38,38,.08), transparent 60%),
+        linear-gradient(180deg,#f6fbff,#fffefb 40%);
+    }
+    img,svg{max-width:100%; display:block}
+
+    .wrap{max-width:1160px; margin:0 auto; padding:1.1rem}
+
+    /* Hero */
+    header.hero{
+      margin:1rem auto; border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow);
+      background: linear-gradient(135deg, rgba(30,64,175,1) 0%, rgba(220,38,38,1) 100%);
+      color:#fff; position:relative; isolation:isolate;
+    }
+    .hero-grid{display:grid; grid-template-columns: 1.2fr .8fr; gap:1rem; align-items:center}
+    .hero-art{ position:relative; padding:1rem; min-height:260px; display:grid; place-items:center }
+    .title{ padding:1rem 1.2rem }
+    .title h1{ font-size:clamp(1.8rem,3.8vw,3.2rem); margin:.25rem 0 .35rem }
+    .badge{ display:inline-block; background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.4);
+      padding:.18rem .55rem; border-radius:999px; letter-spacing:.3px; font-weight:700 }
+    .title p{ margin:.25rem 0; opacity:.95 }
+    .chips{ display:flex; gap:.4rem; flex-wrap:wrap; margin-top:.4rem }
+    .chip{ font-size:.85rem; background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.4); padding:.25rem .6rem; border-radius:999px }
+
+    /* Flag */
+    .flag{ width:min(360px, 94%); height:220px; border-radius:16px; overflow:hidden; border:4px solid rgba(255,255,255,.9);
+      position:relative; box-shadow: 0 20px 50px rgba(0,0,0,.25) }
+    .flag .stripe{ position:absolute; inset:0 }
+    .flag .emblem{ position:absolute; inset:auto auto 10px 10px; font-size:52px; filter:drop-shadow(0 2px 2px rgba(0,0,0,.3)) }
+
+    /* Sections */
+    section{ margin:1.1rem 0 }
+    h2{ font-size:1.45rem; margin:.2rem 0 .7rem }
+    .grid{ display:grid; gap:1rem }
+    .facts{ grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)) }
+    .two{ grid-template-columns: repeat(2, minmax(0, 1fr)) }
+    .three{ grid-template-columns: repeat(3, minmax(0, 1fr)) }
+    .card{ background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); border:1px solid #e7eef6; padding:1rem }
+    .fact h3{ margin:.2rem 0; font-size:1rem; color:#0b1220 }
+    .fact p{ margin:.2rem 0; color:var(--muted) }
+
+    /* Values / Laws */
+    .pill{ display:inline-flex; align-items:center; gap:.45rem; padding:.35rem .7rem; border-radius:999px; background:#0b1220; color:#fff; font-weight:700; box-shadow:0 6px 16px rgba(0,0,0,.12) }
+
+    /* Map */
+    .mapcard{ padding:0; overflow:hidden }
+    .maphead{ padding:1rem 1rem 0 }
+    .mapwrap{ position:relative; }
+    .water{ fill: #bfe6ff }
+    .land { fill: #86d38c; stroke:#0b1220; stroke-width:2 }
+    .sand { fill: #ffe8b3 }
+    .wave { stroke:#7ac2ee; stroke-width:2; stroke-linecap:round; opacity:.65; animation: bob 4s ease-in-out infinite }
+    .wave:nth-child(2){ animation-delay:.8s }
+    .wave:nth-child(3){ animation-delay:1.6s }
+    @keyframes bob { 0%,100%{ transform: translateY(0)} 50%{ transform: translateY(3px)} }
+
+    .beacon{ fill: var(--gold); stroke:#fff; stroke-width:3; filter:drop-shadow(0 0 6px rgba(245,158,11,.8)) }
+    .label{ font: 700 12px/1 system-ui,Segoe UI,Roboto,Arial; fill:#0b1220; paint-order: stroke; stroke:#ffffff; stroke-width:3px; }
+
+    /* Roster */
+    .roster{ grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)) }
+    .hero-card{ position:relative; padding:1rem; border-radius:16px; border:1px solid #e7eef6; background:linear-gradient(180deg,#fff, #f7fbff);
+      box-shadow: var(--shadow); transition: transform .2s ease, box-shadow .2s ease }
+    .hero-card:hover{ transform: translateY(-4px) rotate(-.3deg); box-shadow: 0 16px 40px rgba(0,0,0,.12) }
+    .hero-emoji{ font-size:2rem }
+    .hero-meta{ color:var(--muted); font-size:.92rem }
+
+    /* Timeline */
+    .timeline{ position:relative; padding-left:1rem }
+    .timeline::before{ content:""; position:absolute; left:10px; top:0; bottom:0; width:3px; background:linear-gradient(var(--blue),var(--red)) }
+    .event{ position:relative; padding:.65rem 0 .65rem 1rem }
+    .dot{ position:absolute; left:1px; top:14px; width:14px; height:14px; border-radius:50%; background:var(--gold); box-shadow:0 0 0 3px #fff }
+
+    /* Buttons */
+    .actions{ display:flex; gap:.6rem; flex-wrap:wrap }
+    .btn{ appearance:none; border:none; background:linear-gradient(135deg, var(--blue), var(--gold)); color:#fff; font-weight:900;
+      padding:.7rem 1rem; border-radius:12px; cursor:pointer; box-shadow:0 8px 20px rgba(30,64,175,.35) }
+    .btn.dark{ background:#0b1220 }
+    .btn.green{ background:linear-gradient(135deg, var(--green), var(--cyan)); color:#00262a }
+
+    /* Fun extras */
+    .quinjet{ position:fixed; left:-80px; top:15vh; width:60px; height:28px; background:conic-gradient(from 200deg, #0b1220, #1f2937, #0b1220);
+      clip-path: polygon(0 45%, 70% 0, 100% 45%, 70% 90%); box-shadow:0 2px 12px rgba(0,0,0,.4); transform: rotate(4deg); z-index:50; animation: fly 4.2s linear forwards }
+    @keyframes fly{ to{ left:110vw; top:6vh; transform: rotate(-6deg) } }
+
+    .shield{ position:fixed; inset:0; pointer-events:none; background:
+      radial-gradient(600px 600px at 50% 55%, rgba(31,41,55,.20), transparent 60%),
+      radial-gradient(1000px 1000px at 50% 50%, rgba(30,64,175,.12), transparent 70%);
+      backdrop-filter: blur(2px); opacity:0; transition:opacity .35s ease; z-index:40 }
+    .shield.on{ opacity:1 }
+
+    .confetti{ position:fixed; top:-12px; width:10px; height:14px; pointer-events:none; opacity:.95; animation:fall 2.6s linear forwards }
+    @keyframes fall{ to{ transform: translateY(110vh) rotate(720deg) } }
+
+    /* Print */
+    @media print{
+      .btn, .actions{ display:none !important }
+      header.hero{ -webkit-print-color-adjust:exact; print-color-adjust:exact }
+    }
+    @media (max-width: 900px){ .hero-grid{ grid-template-columns: 1fr; text-align:center } }
+  </style>
+</head>
+<body>
+  <div class="shield" id="shield" aria-hidden="true"></div>
+  <div class="wrap">
+    <!-- HERO / INTRO -->
+    <header class="hero" id="hero">
+      <div class="hero-grid">
+        <div class="title">
+          <span class="badge">S.H.I.E.L.D. Briefing</span>
+          <h1 id="country-name">Avenger Island</h1>
+          <p id="country-motto">“Courage. Teamwork. Do the right thing.”</p>
+          <div class="chips" role="list">
+            <span class="chip">Capital: <strong id="country-capital">New Assembla</strong></span>
+            <span class="chip">Population: <strong id="country-pop">5,000,000</strong></span>
+            <span class="chip">Language: <strong id="country-lang">Heroic</strong></span>
+          </div>
+          <div class="actions" style="margin-top:.8rem">
+            <button class="btn" id="btn-assemble">🗣️ Assemble!</button>
+            <button class="btn dark" id="btn-shield">🛡️ Raise Shield</button>
+            <button class="btn green" id="btn-print">🖨️ Print</button>
+          </div>
+        </div>
+        <div class="hero-art">
+          <!-- FLAG -->
+          <div class="flag" id="flag" aria-label="National flag">
+            <div class="stripe" data-i="0"></div>
+            <div class="stripe" data-i="1"></div>
+            <div class="stripe" data-i="2"></div>
+            <div class="emblem" id="flag-emblem">⭐</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- FAST FACTS -->
+    <section aria-labelledby="facts-title">
+      <h2 id="facts-title">Fast Facts</h2>
+      <div class="grid facts">
+        <article class="card fact"><h3>Region & Climate</h3><p id="country-climate">Coastal cities, snowy peaks, and sunny valleys. Storms arrive with a dramatic ⚡ (Thor says hi).</p></article>
+        <article class="card fact"><h3>Currency</h3><p id="country-currency">Stark Credits (SCR)</p></article>
+        <article class="card fact"><h3>Government</h3><p id="country-gov">Hero Council — representatives from each region</p></article>
+        <article class="card fact"><h3>National Animal</h3><p id="country-animal">Golden Eagle</p></article>
+        <article class="card fact"><h3>Favourite Food</h3><p id="country-food">Shawarma Saturdays</p></article>
+      </div>
+    </section>
+
+    <!-- VALUES / LAWS -->
+    <section aria-labelledby="values-title">
+      <h2 id="values-title">The Hero Code (Values & Laws)</h2>
+      <div class="grid two">
+        <article class="card">
+          <p class="pill">🫶 Kindness First</p>
+          <p style="color:var(--muted)">Help people, protect the vulnerable, and be a great teammate.</p>
+          <p class="pill">🛡️ Responsibility</p>
+          <p style="color:var(--muted)">Powers or not, we own our choices and fix our mistakes.</p>
+          <p class="pill">🤝 Teamwork</p>
+          <p style="color:var(--muted)">Win together, learn together. No lone-wolf missions at school!</p>
+        </article>
+        <article class="card">
+          <p class="pill">🧪 Science & Learning</p>
+          <p style="color:var(--muted)">Try new ideas, share discoveries, and celebrate curious minds.</p>
+          <p class="pill">🌿 Planet Care</p>
+          <p style="color:var(--muted)">Clean energy, green transport, and zero-waste labs.</p>
+          <p class="pill">⚖️ Fair Play</p>
+          <p style="color:var(--muted)">Rules apply to everyone—yes, even super-geniuses.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- GEOGRAPHY / MAP (SVG with Avengers-style "A" island) -->
+    <section aria-labelledby="map-title">
+      <h2 id="map-title">Geography & HQ Map</h2>
+      <article class="card mapcard">
+        <div class="maphead">
+          <p id="country-geo">Avenger Island blends high-tech cities with wild national parks. The island’s shape nods to a heroic “A”.</p>
+        </div>
+        <div class="mapwrap">
+          <!-- Responsive SVG (viewBox 0 0 1000 620) -->
+          <svg viewBox="0 0 1000 620" role="img" aria-labelledby="map-alt" xmlns="http://www.w3.org/2000/svg">
+            <title id="map-alt">Stylised map of Avenger Island. Blue ocean, green island shaped like a bold A with a ring-like coastline. Landmarks marked with golden beacons.</title>
+
+            <!-- Ocean -->
+            <rect x="0" y="0" width="1000" height="620" class="water"/>
+
+            <!-- Decorative waves -->
+            <path d="M40 560 q20 -10 40 0 t40 0 t40 0 t40 0 t40 0" class="wave" fill="none"/>
+            <path d="M200 585 q20 -10 40 0 t40 0 t40 0 t40 0 t40 0" class="wave" fill="none"/>
+            <path d="M560 575 q20 -10 40 0 t40 0 t40 0 t40 0 t40 0" class="wave" fill="none"/>
+
+            <!-- Sandy outline (ring suggestion) -->
+            <path class="sand" d="
+              M500,80
+              C 360,100 260,180 220,300
+              C 200,360 210,430 250,490
+              C 310,575 405,610 500,600
+              C 595,610 690,575 750,490
+              C 790,430 800,360 780,300
+              C 740,180 640,100 500,80
+              Z" />
+
+            <!-- Island silhouette (A-inspired; simplified & original, not a replica) -->
+            <path class="land" d="
+              M500,120
+              C 380,140 295,205 265,300
+              C 245,360 250,420 285,470
+              C 335,540 415,565 500,556
+              C 585,565 665,540 715,470
+              C 750,420 755,360 735,300
+              C 705,205 620,140 500,120
+              Z
+
+              M410,430
+              L 470,280
+              Q 500,210 530,280
+              L 590,430
+              L 540,430
+              L 515,365
+              L 485,365
+              L 460,430
+              Z
+
+              M505,320
+              A 55 55 0 1 0 505 319 Z
+            "/>
+
+            <!-- Beacons (x,y): Stark City, Bifrost Ridge, Shield Bay -->
+            <circle cx="600" cy="340" r="8" class="beacon"/>
+            <text x="616" y="344" class="label">Stark City</text>
+
+            <circle cx="520" cy="240" r="8" class="beacon"/>
+            <text x="536" y="244" class="label">Bifrost Ridge</text>
+
+            <circle cx="375" cy="410" r="8" class="beacon"/>
+            <text x="391" y="414" class="label">Shield Bay</text>
+          </svg>
+        </div>
+        <div style="padding:1rem; color:var(--muted);">
+          Tip: If you want your own art, replace the SVG with a PNG of your hand-drawn map and keep the section title.
+        </div>
+      </article>
+    </section>
+
+    <!-- TECH & TRANSPORT -->
+    <section aria-labelledby="tech-title">
+      <h2 id="tech-title">Tech & Transport</h2>
+      <div class="grid three">
+        <article class="card fact"><h3>Clean Power</h3><p>Arc-reactor grids & solar shields keep cities bright and green.</p></article>
+        <article class="card fact"><h3>Transit</h3><p>Quinjets between cities, web-lines in metros, and bike lanes everywhere.</p></article>
+        <article class="card fact"><h3>Safety</h3><p>Community beacons alert heroes & helpers in seconds.</p></article>
+      </div>
+    </section>
+
+    <!-- HOLIDAYS / TIMELINE -->
+    <section aria-labelledby="holidays-title">
+      <h2 id="holidays-title">National Holidays</h2>
+      <div class="card">
+        <div class="timeline" id="holiday-list"></div>
+      </div>
+    </section>
+
+    <!-- ROSTER -->
+    <section aria-labelledby="roster-title">
+      <h2 id="roster-title">Hero Roster</h2>
+      <div class="grid roster" id="roster"></div>
+    </section>
+
+    <!-- ANTHEM -->
+    <section aria-labelledby="anthem-title">
+      <h2 id="anthem-title">National Anthem</h2>
+      <div class="card">
+        <p id="country-anthem">From towers of light to mountains that sing,
+we stand side by side—let the hero bells ring!
+When the call echoes out, we answer as one:
+“Avenger Island, united—our best days have begun!”</p>
+        <div class="actions" style="margin-top:.6rem">
+          <button class="btn" id="btn-fireworks">🎆 Stark Fireworks</button>
+          <button class="btn dark" id="btn-quinjet">✈️ Launch Quinjet</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- GALLERY (OPTIONAL) -->
+    <section aria-labelledby="gallery-title">
+      <h2 id="gallery-title">Gallery</h2>
+      <div class="grid three" id="gallery">
+        <img src="https://images.unsplash.com/photo-1519744346363-66f488a6e0a7?q=80&w=1600&auto=format&fit=crop" alt="City skyline"/>
+        <img src="https://images.unsplash.com/photo-1470770903676-69b98201ea1c?q=80&w=1600&auto=format&fit=crop" alt="Mountains"/>
+        <img src="https://images.unsplash.com/photo-1499346030926-9a72daac6c63?q=80&w=1600&auto=format&fit=crop" alt="Coast"/>
+      </div>
+    </section>
+
+    <footer style="text-align:center; color:var(--muted); margin:1.4rem 0 2rem">
+      <small id="footer-by">Created by ____ (Year 5/6) — 2025</small>
+    </footer>
+  </div>
+
+  <script>
+    // ——— PRESENTATION DATA ———
+    const Country = {
+      name: 'Avenger Island',
+      motto: 'Courage. Teamwork. Do the right thing.',
+      capital: 'New Assembla',
+      population: 5000000,
+      language: 'Heroic',
+      climate: 'Coastal cities, snowy peaks, and sunny valleys. Storms arrive with a dramatic ⚡.',
+      geography: 'Avenger Island blends high-tech cities with wild national parks. The island’s shape nods to a heroic “A”.',
+      currency: 'Stark Credits (SCR)',
+      government: 'Hero Council — representatives from each region',
+      animal: 'Golden Eagle',
+      food: 'Shawarma Saturdays',
+      anthem:
+`From towers of light to mountains that sing,
+we stand side by side—let the hero bells ring!
+When the call echoes out, we answer as one:
+“Avenger Island, united—our best days have begun!”`,
+      byline: 'Created by ____ (Year 5/6) — 2025',
+      holidays: [
+        { name: 'Avengers Day (May)', blurb: 'Parade of heroes, STEM fairs, and city picnics.' },
+        { name: 'Founders Week (Sept)', blurb: 'Team challenges, kindness quests, and art walls.' },
+        { name: 'Science Expo (Nov)', blurb: 'Inventions show-and-tell, clean-energy demos.' },
+      ],
+      flag: { layout: 'three-vertical', c1: '#dc2626', c2: '#f59e0b', c3: '#1e40af', emblem: '⭐' },
+      heroes: [
+        { name:'Iron Guardian', emoji:'🤖', role:'Tech genius', power:'Repulsor labs & rescue drones' },
+        { name:'Captain Stellar', emoji:'🛡️', role:'Team leader', power:'Unbreakable shield & strategy' },
+        { name:'Thunder Friend', emoji:'⚡', role:'Weather helper', power:'Brings rain to farms, charges grids' },
+        { name:'Gamma Buddy', emoji:'💪', role:'Builder', power:'Lifts bridges, plants trees (gently)' },
+        { name:'Night Fox', emoji:'🕷️', role:'Scout', power:'Web-lines & wall-crawling cleanups' },
+        { name:'Red Hawk', emoji:'🏹', role:'Explorer', power:'Pinpoint planning & rescue lines' },
+        { name:'Shadow Sparrow', emoji:'🗡️', role:'Agent', power:'Stealth safety checks & teamwork' },
+      ],
+      gallery: [
+        'https://images.unsplash.com/photo-1519744346363-66f488a6e0a7?q=80&w=1600&auto=format&fit=crop',
+        'https://images.unsplash.com/photo-1470770903676-69b98201ea1c?q=80&w=1600&auto=format&fit=crop',
+        'https://images.unsplash.com/photo-1499346030926-9a72daac6c63?q=80&w=1600&auto=format&fit=crop',
+      ],
+    };
+
+    // ——— DOM helpers ———
+    const $  = (s, r=document)=> r.querySelector(s);
+    const $$ = (s, r=document)=> [...r.querySelectorAll(s)];
+
+    // ——— Render core ———
+    function render(){
+      // Hero
+      $('#country-name').textContent = Country.name;
+      $('#country-motto').textContent = '“' + Country.motto + '”';
+      $('#country-capital').textContent = Country.capital;
+      $('#country-pop').textContent = Country.population.toLocaleString();
+      $('#country-lang').textContent = Country.language;
+
+      // Facts
+      $('#country-climate').textContent = Country.climate;
+      $('#country-currency').textContent = Country.currency;
+      $('#country-gov').textContent = Country.government;
+      $('#country-animal').textContent = Country.animal;
+      $('#country-food').textContent = Country.food;
+
+      // Geography
+      $('#country-geo').textContent = Country.geography;
+
+      // Holidays
+      const tl = $('#holiday-list');
+      tl.innerHTML = Country.holidays.map(h => `
+        <div class="event"><div class="dot"></div><strong>${h.name}</strong><div style="color:var(--muted)">${h.blurb||''}</div></div>
+      `).join('');
+
+      // Roster
+      const ros = $('#roster');
+      ros.innerHTML = Country.heroes.map(h => `
+        <article class="hero-card">
+          <div class="hero-emoji">${h.emoji}</div>
+          <h3 style="margin:.3rem 0">${h.name}</h3>
+          <div class="hero-meta">${h.role}</div>
+          <p style="margin:.4rem 0 0">${h.power}</p>
+        </article>
+      `).join('');
+
+      // Anthem & footer
+      $('#country-anthem').textContent = Country.anthem;
+      $('#footer-by').textContent = Country.byline;
+
+      // Flag
+      renderFlag();
+    }
+
+    function renderFlag(){
+      const F = Country.flag; const flag = $('#flag');
+      const s0 = flag.querySelector('.stripe[data-i="0"]');
+      const s1 = flag.querySelector('.stripe[data-i="1"]');
+      const s2 = flag.querySelector('.stripe[data-i="2"]');
+      const em = $('#flag-emblem');
+      // reset stripes
+      [s0,s1,s2].forEach(el=>{ el.style.display='none'; el.style.position='absolute'; el.style.inset='0' });
+      s0.style.background = F.c1; s1.style.background = F.c2; s2.style.background = F.c3;
+      em.textContent = F.emblem || '⭐';
+
+      if(F.layout==='solid'){
+        s0.style.display='block';
+      } else if(F.layout==='two-horizontal'){
+        s0.style.display='block'; s1.style.display='block';
+        s0.style.height='50%'; s1.style.height='50%'; s1.style.top='50%';
+      } else if(F.layout==='three-horizontal'){
+        s0.style.display='block'; s1.style.display='block'; s2.style.display='block';
+        s0.style.height='33.34%'; s1.style.height='33.34%'; s2.style.height='33.34%';
+        s1.style.top='33.34%'; s2.style.top='66.66%';
+      } else if(F.layout==='three-vertical'){
+        s0.style.display='block'; s1.style.display='block'; s2.style.display='block';
+        s0.style.width='33.34%'; s1.style.width='33.34%'; s2.style.width='33.34%';
+        s0.style.height='100%'; s1.style.height='100%'; s2.style.height='100%';
+        s1.style.left='33.34%'; s2.style.left='66.66%';
+      }
+    }
+
+    // ——— Fun interactions ———
+    function confetti(amount=120){
+      const colours = ['#ffffff', Country.flag.c1, Country.flag.c2, Country.flag.c3, '#4ade80'];
+      for(let i=0;i<amount;i++){
+        const d = document.createElement('div'); d.className='confetti';
+        d.style.left = Math.random()*100 + 'vw';
+        d.style.background = colours[Math.floor(Math.random()*colours.length)];
+        d.style.transform = `translateY(-10px) rotate(${Math.random()*360}deg)`;
+        d.style.animationDuration = 1.8 + Math.random()*1.6 + 's';
+        d.style.width = (6+Math.random()*8)+'px'; d.style.height=(8+Math.random()*10)+'px';
+        document.body.appendChild(d);
+        setTimeout(()=> d.remove(), 2800);
+      }
+    }
+    function quinjet(){
+      const q = document.createElement('div'); q.className='quinjet'; document.body.appendChild(q);
+      setTimeout(()=> q.remove(), 4500);
+    }
+
+    // ——— Wire up (guard for safety) ———
+    document.addEventListener('DOMContentLoaded', () => {
+      render();
+      const btnPrint     = $('#btn-print');
+      const btnAsm       = $('#btn-assemble');
+      const btnQuin      = $('#btn-quinjet');
+      const btnFire      = $('#btn-fireworks');
+      const btnShield    = $('#btn-shield');
+      const shield       = $('#shield');
+
+      btnPrint?.addEventListener('click', () => window.print());
+      btnAsm?.addEventListener('click', () => confetti(160));
+      btnQuin?.addEventListener('click', quinjet);
+      btnFire?.addEventListener('click', () => { confetti(200); setTimeout(()=>confetti(140), 350); });
+      btnShield?.addEventListener('click', () => shield.classList.toggle('on'));
+    });
+  </script>
+</body>
+</html>

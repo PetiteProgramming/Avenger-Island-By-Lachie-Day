@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Design‑A‑Country — Interactive Kids Presentation</title>
+  <meta name="description" content="A fun, kid‑friendly website template to design your own country with a live preview, flag maker, mini map builder, and presenter mode."/>
+  <style>
+    :root{
+      --ink:#1d1d1f;
+      --bg:#fffefb;
+      --card:#ffffff;
+      --muted:#6b7280;
+      --brand:#21c4d3;         /* playful cyan (Lachie fav) */
+      --brand-2:#bca0dd;       /* lilac nod */
+      --brand-3:#ffd166;       /* sunny */
+      --accent:#53d86a;        /* happy green */
+      --danger:#ef4444;
+      --ring: 0 0 0 3px rgba(33,196,211,.25);
+      --radius:18px;
+      --shadow:0 12px 30px rgba(0,0,0,.08);
+      --grid-w: 12; /* map grid width */
+      --grid-h: 8;  /* map grid height */
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font:16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+      color:var(--ink); background:linear-gradient(180deg,#f7fbff, #fffefb 40%);
+    }
+
+    .app{
+      display:grid; grid-template-columns: 340px 1fr; gap:1rem; padding:1rem; max-width:1200px; margin:0 auto 6rem;
+    }
+
+    header.topbar{
+      position:sticky; top:0; z-index:5; background:radial-gradient(80% 120% at 20% -20%, var(--brand) 0%, transparent 55%),
+                 radial-gradient(65% 100% at 100% 0%, var(--brand-2) 0%, transparent 60%), #0d1216;
+      color:#fff; padding:1rem 1.2rem; display:flex; align-items:center; gap:.8rem; box-shadow:0 10px 30px rgba(0,0,0,.15);
+    }
+    header.topbar .logo{
+      width:42px; height:42px; border-radius:50%; background:conic-gradient(from 0deg, var(--brand), var(--brand-2), var(--brand-3), var(--brand));
+      box-shadow: inset 0 0 0 4px rgba(255,255,255,.5), 0 8px 20px rgba(0,0,0,.3);
+      display:grid; place-items:center; font-weight:900; color:#0d1216;
+    }
+    header.topbar h1{ font-size:1.05rem; margin:.1rem 0 0; letter-spacing:.2px }
+    header.topbar small{opacity:.85; display:block; font-size:.8rem}
+
+    .card{ background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); border:1px solid #eef2f7 }
+
+    /* Sidebar */
+    .sidebar{ padding:1rem; position:sticky; top:84px; align-self:start; max-height: calc(100dvh - 100px); overflow:auto }
+    .stepper{ display:grid; gap:.5rem; margin:0 0 1rem }
+    .stepper button{
+      all:unset; display:flex; align-items:center; gap:.6rem; padding:.6rem .8rem; border:1px solid #e5e7eb; border-radius:12px; cursor:pointer; background:#fff;
+    }
+    .stepper button.active{ border-color:var(--brand); box-shadow:var(--ring) }
+    .stepper .n{ width:28px; height:28px; border-radius:8px; display:grid; place-items:center; font-weight:800; background:var(--brand); color:#00262a }
+
+    .controls{ display:grid; gap:.9rem }
+    .controls fieldset{ border:1px dashed #e5e7eb; border-radius:12px; padding:.8rem }
+    .controls legend{ font-weight:800; color:#0d1216 }
+    .row{ display:grid; grid-template-columns: 1fr 1fr; gap:.6rem }
+    label{ display:block; font-weight:700; font-size:.9rem }
+    input[type="text"], input[type="number"], textarea, select{
+      width:100%; padding:.65rem .7rem; border:1px solid #e5e7eb; border-radius:10px; background:#fff; font:inherit;
+    }
+    textarea{ min-height:84px; resize:vertical }
+    input[type="color"]{ width:100%; height:40px; padding:0; border:1px solid #e5e7eb; border-radius:10px; background:#fff }
+
+    .btn{
+      appearance:none; border:none; background:linear-gradient(135deg, var(--brand), var(--accent)); color:#00262a; font-weight:900;
+      padding:.7rem 1rem; border-radius:12px; cursor:pointer; box-shadow:0 8px 20px rgba(33,196,211,.35);
+    }
+    .btn.secondary{ background:#0d1216; color:#fff; box-shadow:0 8px 20px rgba(0,0,0,.3) }
+    .btn.outline{ background:transparent; border:2px solid #0d1216; color:#0d1216 }
+    .actions{ display:flex; gap:.6rem; flex-wrap:wrap }
+
+    /* Preview */
+    .preview{ padding:1rem; display:grid; gap:1rem }
+    .hero{
+      background: radial-gradient(80% 100% at 0% 0%, rgba(33,196,211,.25), transparent 60%),
+                 radial-gradient(100% 120% at 100% 0%, rgba(188,160,221,.3), transparent 60%),
+                 linear-gradient(180deg,#0d1216,#15202a);
+      color:#fff; border-radius:var(--radius); overflow:hidden; display:grid; grid-template-columns: 1.2fr .8fr; min-height:220px; align-items:center;
+    }
+    .hero .info{ padding:1.2rem 1.2rem }
+    .hero h2{ font-size:2rem; margin:.2rem 0 }
+    .hero p{ margin:.2rem 0; opacity:.9 }
+    .hero .flag-wrap{ display:grid; place-items:center; padding:1rem }
+    .flag{ width:230px; height:150px; border-radius:10px; overflow:hidden; border:3px solid rgba(255,255,255,.9); position:relative; background:#eee }
+    .flag .emblem{ position:absolute; inset:auto auto 8px 8px; font-size:36px; filter:drop-shadow(0 2px 2px rgba(0,0,0,.2)) }
+
+    .brochure{ display:grid; grid-template-columns: 1fr 1fr; gap:1rem }
+    .panel{ padding:1rem; border:1px solid #eef2f7; border-radius:var(--radius); background:#fff }
+    .panel h3{ margin:.2rem 0 .6rem; letter-spacing:.2px }
+    .facts{ display:grid; gap:.35rem; font-size:.95rem }
+    .facts strong{ color:#0d1216 }
+
+    /* Map builder */
+    .map-wrap{ display:grid; gap:.5rem }
+    .map-grid{ --tile:28px; display:grid; grid-template-columns: repeat(var(--grid-w), var(--tile)); grid-auto-rows: var(--tile);
+      background:var(--water,#bfe6ff); border:2px solid #0d1216; border-radius:10px; overflow:hidden; box-shadow: inset 0 0 0 3px rgba(0,0,0,.1);
+    }
+    .cell{ background:transparent; outline:1px solid rgba(0,0,0,.06) }
+    .cell.land{ background:var(--land,#86d38c) }
+    .map-legend{ font-size:.9rem; color:#334155 }
+
+    /* Presenter mode */
+    .presenter{ position:fixed; inset:0; background:#0b1116; color:#fff; z-index:50; display:none; flex-direction:column }
+    .presenter.on{ display:flex }
+    .presenter .stage{ flex:1; display:grid; place-items:center; padding:2rem }
+    .slide{ width:min(1000px, 96vw); background:#0d1216; border:1px solid #2a3a46; border-radius:22px; box-shadow:0 30px 80px rgba(0,0,0,.5); overflow:hidden }
+    .slide .title{ padding:2rem; background:linear-gradient(135deg, rgba(33,196,211,.25), rgba(188,160,221,.15)); border-bottom:1px solid #253341 }
+    .slide .content{ padding:2rem; display:grid; gap:1rem }
+    .slide .flag{ width:300px; height:200px; border:5px solid rgba(255,255,255,.8) }
+
+    .presenter .controls{ padding:1rem; background:#070c10; border-top:1px solid #253341; display:flex; gap:.6rem; justify-content:center }
+
+    /* Confetti */
+    .confetti{ position:fixed; top:-10px; width:10px; height:14px; pointer-events:none; opacity:.9; animation:fall 2.8s linear forwards }
+    @keyframes fall{ to{ transform: translateY(110vh) rotate(720deg) } }
+
+    /* Print */
+    @media print{
+      header.topbar, .sidebar, .actions, .presenter{ display:none !important }
+      .app{ grid-template-columns: 1fr; margin:0; padding:0 }
+      .preview{ padding:0 }
+      .panel{ break-inside:avoid }
+    }
+
+    /* Small screens */
+    @media (max-width: 900px){
+      .app{ grid-template-columns: 1fr; }
+      .hero{ grid-template-columns: 1fr; text-align:center }
+      .hero .flag-wrap{ order:-1 }
+      .sidebar{ position:static; max-height:unset }
+    }
+  </style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand" style="display:flex;align-items:center;gap:.8rem">
+    <div class="logo" aria-hidden="true">★</div>
+    <div class="title">
+      <h1 id="hdr-name">Avenger Island</h1>
+      <small>Capital: <strong id="hdr-capital">Stark City</strong></small>
+    </div>
+  </div>
+
+  <!-- Flag on the right of the header -->
+  <div class="hero-flag">
+    <div class="flag" id="hdr-flag">
+      <div class="stripe" data-i="0"></div>
+      <div class="stripe" data-i="1"></div>
+      <div class="stripe" data-i="2"></div>
+      <div class="emblem" id="hdr-emblem">🌟</div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="btn" id="btn-present">🎤 Presenter Mode</button>
+    <button class="btn secondary" id="btn-print">🖨️ Print</button>
+    <button class="btn outline" id="btn-reset">↺ Reset</button>
+  </div>
+</header>
+
+  <main class="app">
+    <!-- Sidebar: steps & inputs -->
+    <aside class="sidebar card" aria-label="Builder">
+      <nav class="stepper" id="stepper"></nav>
+      <div class="controls" id="controls"></div>
+    </aside>
+
+    <!-- Live Preview -->
+    <section class="preview">
+      <section class="hero card">
+        <div class="info">
+          <p>Welcome to</p>
+          <h2 id="pv-name">Your Country</h2>
+          <p id="pv-motto">“Where adventure begins!”</p>
+          <p><strong>Capital:</strong> <span id="pv-capital">Sunnyville</span> · <strong>Population:</strong> <span id="pv-pop">1,000,000</span> · <strong>Language:</strong> <span id="pv-lang">Gigglish</span></p>
+        </div>
+        <div class="flag-wrap">
+          <div class="flag" id="pv-flag">
+            <div class="stripe" data-i="0"></div>
+            <div class="stripe" data-i="1"></div>
+            <div class="stripe" data-i="2"></div>
+            <div class="emblem" id="pv-emblem">🌟</div>
+          </div>
+        </div>
+      </section>
+
+      <div class="brochure">
+        <article class="panel">
+          <h3>Fast Facts</h3>
+          <div class="facts">
+            <div><strong>Region & Climate:</strong> <span id="pv-climate">Tropical islands with gentle sea breezes.</span></div>
+            <div><strong>Currency:</strong> <span id="pv-currency">Sparkle Coins (SPC)</span></div>
+            <div><strong>Government:</strong> <span id="pv-gov">Kind Council</span></div>
+            <div><strong>National Animal:</strong> <span id="pv-animal">Rainbow Quokka</span></div>
+            <div><strong>Favourite Food:</strong> <span id="pv-food">Cloud Pancakes</span></div>
+          </div>
+        </article>
+
+        <article class="panel">
+          <h3>Mini Map</h3>
+          <div class="map-wrap">
+            <div class="map-grid" id="map"></div>
+            <div class="map-legend">Click squares to toggle <strong>land</strong> and <strong>water</strong>. Land tiles: <span id="land-count">0</span>.</div>
+          </div>
+        </article>
+
+        <article class="panel">
+          <h3>Holidays & Fun</h3>
+          <ul id="pv-holidays" class="facts"></ul>
+        </article>
+
+        <article class="panel">
+          <h3>Anthem</h3>
+          <p id="pv-anthem">We sing with sunny hearts and hands in the air, our home of fun, kindness, and fresh ocean air!</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <!-- Presenter overlay -->
+  <section class="presenter" id="presenter" aria-hidden="true">
+    <div class="stage">
+      <div class="slide" id="slide">
+        <div class="title">
+          <h2 id="show-title">Welcome to Your Country</h2>
+          <p id="show-sub">Capital: <span id="show-capital">Sunnyville</span> • Language: <span id="show-lang">Gigglish</span></p>
+        </div>
+        <div class="content">
+          <div style="display:flex; gap:1.2rem; align-items:center; flex-wrap:wrap">
+            <div class="flag" id="show-flag">
+              <div class="stripe" data-i="0"></div>
+              <div class="stripe" data-i="1"></div>
+              <div class="stripe" data-i="2"></div>
+              <div class="emblem" id="show-emblem">🌟</div>
+            </div>
+            <div>
+              <p id="show-motto" style="font-size:1.3rem; opacity:.9"></p>
+              <p><strong>Currency:</strong> <span id="show-currency"></span></p>
+              <p><strong>Government:</strong> <span id="show-gov"></span></p>
+              <p><strong>Animal:</strong> <span id="show-animal"></span> • <strong>Food:</strong> <span id="show-food"></span></p>
+            </div>
+          </div>
+          <div>
+            <h3>Holidays</h3>
+            <ul id="show-holidays"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="controls">
+      <button class="btn" id="prev-slide">◀ Prev</button>
+      <button class="btn" id="next-slide">Next ▶</button>
+      <button class="btn secondary" id="close-present">Close ✖</button>
+    </div>
+  </section>
+
+  <script>
+    // ---------- Data Model ----------
+    const model = {
+      basics: {
+        name: 'Your Country', capital: 'Sunnyville', population: 1000000,
+        language: 'Gigglish', motto: 'Where adventure begins!', climate: 'Tropical islands with gentle sea breezes.',
+        createdBy: ''
+      },
+      flag: { layout: 'three-horizontal', c1: '#21c4d3', c2: '#ffd166', c3: '#bca0dd', emblem: '🌟' },
+      culture: { currency: 'Sparkle Coins (SPC)', government: 'Kind Council', animal: 'Rainbow Quokka', food: 'Cloud Pancakes', anthem: 'We sing with sunny hearts and hands in the air, our home of fun, kindness, and fresh ocean air!', holidays: ['Friendship Day', 'Big Picnic Festival', 'Lantern Night'] },
+      map: { w: parseInt(getComputedStyle(document.documentElement).getPropertyValue('--grid-w')), h: parseInt(getComputedStyle(document.documentElement).getPropertyValue('--grid-h')), landColor:'#86d38c', waterColor:'#bfe6ff', cells: [] },
+    };
+
+    // Populate map cells default (water)
+    model.map.cells = Array.from({length: model.map.w * model.map.h}, () => 0);
+
+    // ---------- Utilities ----------
+    const $ = (sel, root=document) => root.querySelector(sel);
+    const $$ = (sel, root=document) => [...root.querySelectorAll(sel)];
+
+    const save = () => { localStorage.setItem('design-country-v1', JSON.stringify(model)); };
+    const load = () => {
+      try{ const d = JSON.parse(localStorage.getItem('design-country-v1')); if(d){ Object.assign(model.basics, d.basics||{}); Object.assign(model.flag, d.flag||{}); Object.assign(model.culture, d.culture||{}); if(d.map){ Object.assign(model.map, d.map); } } }
+      catch(e){}
+    };
+
+    const randOf = arr => arr[Math.floor(Math.random()*arr.length)];
+
+    // ---------- Stepper + Forms ----------
+    const steps = [
+      { id:'basics', label:'Basics' },
+      { id:'flag', label:'Flag' },
+      { id:'map', label:'Map' },
+      { id:'culture', label:'People & Culture' },
+      { id:'show', label:'Showtime' },
+    ];
+
+    function renderStepper(activeId='basics'){
+      const stepper = $('#stepper');
+      stepper.innerHTML = steps.map((s,i)=>
+        `<button class="${s.id===activeId?'active':''}" data-goto="${s.id}"><span class="n">${i+1}</span>${s.label}</button>`
+      ).join('');
+      stepper.addEventListener('click', e=>{
+        const b = e.target.closest('button[data-goto]');
+        if(!b) return; renderControls(b.dataset.goto); $$('#stepper button').forEach(x=>x.classList.remove('active')); b.classList.add('active');
+      }, {once:true});
+    }
+
+    function renderControls(section='basics'){
+      const c = $('#controls');
+      if(section==='basics'){
+        c.innerHTML = `
+          <fieldset><legend>Country Basics</legend>
+            <label>Country Name<input id="in-name" type="text" placeholder="e.g., Starland" value="${model.basics.name}"></label>
+            <div class="row">
+              <label>Capital City<input id="in-cap" type="text" value="${model.basics.capital}"></label>
+              <label>Population<input id="in-pop" type="number" min="1" value="${model.basics.population}"></label>
+            </div>
+            <div class="row">
+              <label>Language<input id="in-lang" type="text" value="${model.basics.language}"></label>
+              <label>Created by (name)<input id="in-by" type="text" value="${model.basics.createdBy||''}"></label>
+            </div>
+            <label>Motto / Slogan<textarea id="in-motto">${model.basics.motto}</textarea></label>
+            <label>Region & Climate<textarea id="in-climate">${model.basics.climate}</textarea></label>
+            <div class="actions">
+              <button class="btn" id="btn-ideas-basics">🎲 Random ideas</button>
+            </div>
+          </fieldset>`;
+        $('#in-name').addEventListener('input', e=>{ model.basics.name = e.target.value; sync(); save(); });
+        $('#in-cap').addEventListener('input', e=>{ model.basics.capital = e.target.value; sync(); save(); });
+        $('#in-pop').addEventListener('input', e=>{ model.basics.population = +e.target.value||0; sync(); save(); });
+        $('#in-lang').addEventListener('input', e=>{ model.basics.language = e.target.value; sync(); save(); });
+        $('#in-by').addEventListener('input', e=>{ model.basics.createdBy = e.target.value; save(); });
+        $('#in-motto').addEventListener('input', e=>{ model.basics.motto = e.target.value; sync(); save(); });
+        $('#in-climate').addEventListener('input', e=>{ model.basics.climate = e.target.value; sync(); save(); });
+        $('#btn-ideas-basics').addEventListener('click', ()=>{
+          model.basics.name = randOf(['Cyan Shores','Lilac Peak','Sunny Archipelago','Aurora Isles','Quokka Quay','Starlight Republic']);
+          model.basics.capital = randOf(['Brighton Bay','Cloud City','Aurora Point','Willow Town']);
+          model.basics.language = randOf(['Gigglish','Auralian','SunSpeak','Code-ish']);
+          model.basics.motto = randOf(['Where adventure begins!','Be kind. Be brave. Be curious.','Dream it, build it, share it.']);
+          sync(); renderControls('basics'); save();
+        });
+      }
+      if(section==='flag'){
+        c.innerHTML = `
+          <fieldset><legend>Flag Designer</legend>
+            <div class="row">
+              <label>Layout
+                <select id="in-layout">
+                  <option value="solid">Solid</option>
+                  <option value="two-horizontal">Two stripes (horizontal)</option>
+                  <option value="three-horizontal">Three stripes (horizontal)</option>
+                  <option value="three-vertical">Three stripes (vertical)</option>
+                </select>
+              </label>
+              <label>Emblem (emoji)
+                <input id="in-emblem" type="text" maxlength="3" value="${model.flag.emblem}">
+              </label>
+            </div>
+            <div class="row">
+              <label>Colour 1<input id="c1" type="color" value="${model.flag.c1}"></label>
+              <label>Colour 2<input id="c2" type="color" value="${model.flag.c2}"></label>
+            </div>
+            <div class="row">
+              <label>Colour 3<input id="c3" type="color" value="${model.flag.c3}"></label>
+              <label>—</label>
+            </div>
+            <div class="actions">
+              <button class="btn" id="btn-ideas-flag">🎲 Random flag</button>
+            </div>
+          </fieldset>`;
+        $('#in-layout').value = model.flag.layout;
+        $('#in-layout').addEventListener('change', e=>{ model.flag.layout = e.target.value; syncFlag(); save(); })
+        $('#in-emblem').addEventListener('input', e=>{ model.flag.emblem = e.target.value || '🌟'; syncFlag(); save(); })
+        $('#c1').addEventListener('input', e=>{ model.flag.c1 = e.target.value; syncFlag(); save(); })
+        $('#c2').addEventListener('input', e=>{ model.flag.c2 = e.target.value; syncFlag(); save(); })
+        $('#c3').addEventListener('input', e=>{ model.flag.c3 = e.target.value; syncFlag(); save(); })
+        $('#btn-ideas-flag').addEventListener('click', ()=>{
+          const palettes = [
+            ['#21c4d3','#ffd166','#bca0dd'],
+            ['#ff9d7d','#7cde7b','#7ab8ff'],
+            ['#ff7b54','#ffd166','#0ea5e9'],
+            ['#111827','#22d3ee','#fde047']
+          ];
+          [model.flag.c1, model.flag.c2, model.flag.c3] = randOf(palettes);
+          model.flag.layout = randOf(['solid','two-horizontal','three-horizontal','three-vertical']);
+          model.flag.emblem = randOf(['🌟','🦘','🦄','🐬','🛡️','⚡','🌈']);
+          syncFlag(); renderControls('flag'); save();
+        });
+      }
+      if(section==='map'){
+        c.innerHTML = `
+          <fieldset><legend>Mini Map Builder</legend>
+            <div class="row">
+              <label>Land Colour<input id="land-color" type="color" value="${model.map.landColor}"></label>
+              <label>Water Colour<input id="water-color" type="color" value="${model.map.waterColor}"></label>
+            </div>
+            <div class="row">
+              <label>Width (tiles)<input id="map-w" type="number" min="6" max="24" value="${model.map.w}"></label>
+              <label>Height (tiles)<input id="map-h" type="number" min="4" max="16" value="${model.map.h}"></label>
+            </div>
+            <div class="actions">
+              <button class="btn" id="map-clear">🧹 Clear Map</button>
+              <button class="btn secondary" id="map-random">✨ Random Islands</button>
+            </div>
+          </fieldset>`;
+        $('#land-color').addEventListener('input', e=>{ model.map.landColor = e.target.value; syncMapColours(); save(); });
+        $('#water-color').addEventListener('input', e=>{ model.map.waterColor = e.target.value; syncMapColours(); save(); });
+        $('#map-w').addEventListener('change', e=>{ resizeMap(+e.target.value, model.map.h); });
+        $('#map-h').addEventListener('change', e=>{ resizeMap(model.map.w, +e.target.value); });
+        $('#map-clear').addEventListener('click', ()=>{ model.map.cells = model.map.cells.map(()=>0); renderMap(); sync(); save(); });
+        $('#map-random').addEventListener('click', ()=>{ randomIslands(); renderMap(); sync(); save(); confetti(); });
+      }
+      if(section==='culture'){
+        c.innerHTML = `
+          <fieldset><legend>People & Culture</legend>
+            <div class="row">
+              <label>Currency<input id="in-currency" type="text" value="${model.culture.currency}"></label>
+              <label>Government<input id="in-gov" type="text" value="${model.culture.government}"></label>
+            </div>
+            <div class="row">
+              <label>National Animal<input id="in-animal" type="text" value="${model.culture.animal}"></label>
+              <label>Favourite Food<input id="in-food" type="text" value="${model.culture.food}"></label>
+            </div>
+            <label>Anthem<textarea id="in-anthem">${model.culture.anthem}</textarea></label>
+            <label>Holidays (one per line)<textarea id="in-holidays">${model.culture.holidays.join('\n')}</textarea></label>
+            <div class="actions">
+              <button class="btn" id="btn-ideas-culture">🎲 Random culture</button>
+              <button class="btn secondary" id="btn-finish">🎉 I’m Done — Celebrate!</button>
+            </div>
+          </fieldset>`;
+        $('#in-currency').addEventListener('input', e=>{ model.culture.currency = e.target.value; sync(); save(); });
+        $('#in-gov').addEventListener('input', e=>{ model.culture.government = e.target.value; sync(); save(); });
+        $('#in-animal').addEventListener('input', e=>{ model.culture.animal = e.target.value; sync(); save(); });
+        $('#in-food').addEventListener('input', e=>{ model.culture.food = e.target.value; sync(); save(); });
+        $('#in-anthem').addEventListener('input', e=>{ model.culture.anthem = e.target.value; sync(); save(); });
+        $('#in-holidays').addEventListener('input', e=>{ model.culture.holidays = e.target.value.split(/\n+/).map(s=>s.trim()).filter(Boolean); sync(); save(); });
+        $('#btn-ideas-culture').addEventListener('click', ()=>{
+          model.culture.currency = randOf(['Quokka Quids (QQ)','Starlings (STL)','Sunbeams (SBN)','Builder Bucks (BBK)']);
+          model.culture.government = randOf(['Kind Council','Explorer Guild','Inventors Assembly','Treehouse Parliament']);
+                    model.culture.animal = randOf(['Rainbow Quokka','Sky Dolphin','Glow Tortoise','Sugar Glider']);
+          model.culture.food = randOf(['Cloud Pancakes','Lava Lasagne (mild!)','Sunfruit Skewers','Moonlight Noodles']);
+          model.culture.holidays = randOf([["Friendship Day","Big Picnic Festival","Lantern Night"],["Maker Monday","Sky Lantern Eve","Kindness Carnival"],["National Nap Day","Ocean Parade","Star Shower Night"]]);
+          sync(); renderControls('culture'); save();
+        });
+        $('#btn-finish').addEventListener('click', ()=>{ confetti(120); setTimeout(()=>confetti(120), 400); });
+      }
+      if(section==='show'){
+        c.innerHTML = `
+          <fieldset><legend>Showtime</legend>
+            <p>Open <strong>Presenter Mode</strong> to show the class a big, beautiful slide with your flag and facts. You can also print as a handout.</p>
+            <div class="actions">
+              <button class="btn" id="go-present">🎤 Open Presenter</button>
+              <button class="btn secondary" id="go-print">🖨️ Print Handout</button>
+            </div>
+          </fieldset>`;
+        $('#go-present').addEventListener('click', ()=> presenter(true));
+        $('#go-print').addEventListener('click', ()=> window.print());
+      }
+    }
+
+    // ---------- Preview Sync ----------
+    function sync(){
+      $('#pv-name').textContent = model.basics.name || 'Your Country';
+      $('#pv-motto').textContent = '“' + (model.basics.motto||'') + '”';
+      $('#pv-capital').textContent = model.basics.capital || '—';
+      $('#pv-pop').textContent = model.basics.population.toLocaleString();
+      $('#pv-lang').textContent = model.basics.language || '—';
+      $('#pv-climate').textContent = model.basics.climate || '';
+      $('#pv-currency').textContent = model.culture.currency || '';
+      $('#pv-gov').textContent = model.culture.government || '';
+      $('#pv-animal').textContent = model.culture.animal || '';
+      $('#pv-food').textContent = model.culture.food || '';
+      $('#pv-anthem').textContent = model.culture.anthem || '';
+      const holUl = $('#pv-holidays'); holUl.innerHTML = model.culture.holidays.map(h=>`<li>${h}</li>`).join('');
+
+      // Presenter
+      $('#show-title').textContent = model.basics.name || 'Your Country';
+      $('#show-sub').innerHTML = `Capital: <span id="show-capital">${model.basics.capital}</span> • Language: <span id="show-lang">${model.basics.language}</span>`;
+      $('#show-motto').textContent = '“' + (model.basics.motto||'') + '”';
+      $('#show-currency').textContent = model.culture.currency;
+      $('#show-gov').textContent = model.culture.government;
+      $('#show-animal').textContent = model.culture.animal;
+      $('#show-food').textContent = model.culture.food;
+      const sHol = $('#show-holidays'); sHol.innerHTML = model.culture.holidays.map(h=>`<li>${h}</li>`).join('');
+
+      syncFlag();
+      syncMapColours();
+    }
+
+    function syncFlag(){
+      const apply = (wrap, F) => {
+        const f = $(wrap);
+        if(!f) return;
+        const s0 = f.querySelector('.stripe[data-i="0"]');
+        const s1 = f.querySelector('.stripe[data-i="1"]');
+        const s2 = f.querySelector('.stripe[data-i="2"]');
+        const em = f.querySelector('.emblem');
+        em.textContent = model.flag.emblem || '🌟';
+        // Reset
+        [s0,s1,s2].forEach(el=>{ el.style.display='none'; el.style.position='absolute'; el.style.inset='0' });
+        s0.style.background = model.flag.c1; s1.style.background = model.flag.c2; s2.style.background = model.flag.c3;
+        if(model.flag.layout==='solid'){
+          s0.style.display='block';
+        } else if(model.flag.layout==='two-horizontal'){
+          s0.style.display='block'; s1.style.display='block';
+          s0.style.height='50%'; s1.style.height='50%'; s1.style.top='50%';
+        } else if(model.flag.layout==='three-horizontal'){
+          s0.style.display='block'; s1.style.display='block'; s2.style.display='block';
+          s0.style.height='33.34%'; s1.style.height='33.34%'; s2.style.height='33.34%';
+          s1.style.top='33.34%'; s2.style.top='66.66%';
+        } else if(model.flag.layout==='three-vertical'){
+          s0.style.display='block'; s1.style.display='block'; s2.style.display='block';
+          s0.style.width='33.34%'; s1.style.width='33.34%'; s2.style.width='33.34%';
+          s0.style.height='100%'; s1.style.height='100%'; s2.style.height='100%';
+          s1.style.left='33.34%'; s2.style.left='66.66%';
+        }
+      };
+      apply('#pv-flag');
+      apply('#show-flag');
+      $('#pv-emblem').textContent = model.flag.emblem || '🌟';
+      $('#show-emblem').textContent = model.flag.emblem || '🌟';
+    }
+
+    // ---------- Map ----------
+    const mapEl = $('#map');
+    let drawDown = false;
+
+    function renderMap(){
+      mapEl.style.setProperty('--grid-w', model.map.w);
+      mapEl.innerHTML = '';
+      model.map.cells.forEach((v,i)=>{
+        const d = document.createElement('div'); d.className = 'cell' + (v? ' land':'' ); d.dataset.i=i;
+        mapEl.appendChild(d);
+      });
+      syncMapColours();
+      updateLandCount();
+    }
+
+    function syncMapColours(){
+      mapEl.style.setProperty('--land', model.map.landColor);
+      mapEl.style.setProperty('--water', model.map.waterColor);
+      $$('#show-flag .stripe, #pv-flag .stripe').forEach(()=>{}); // noop, but keeps parity
+    }
+
+    function updateLandCount(){ $('#land-count').textContent = model.map.cells.filter(Boolean).length; }
+
+    function resizeMap(w,h){
+      w = Math.max(6, Math.min(24, w));
+      h = Math.max(4, Math.min(16, h));
+      const old = model.map;
+      const newCells = Array.from({length:w*h}, (_,idx)=>{
+        const x = idx % w, y = Math.floor(idx/w);
+        if(x<old.w && y<old.h){ return old.cells[y*old.w + x] } else { return 0 }
+      });
+      model.map.w=w; model.map.h=h; model.map.cells=newCells; renderMap(); save();
+    }
+
+    function toggleCell(i,force){
+      model.map.cells[i] = (force!==undefined? force : (model.map.cells[i]?0:1));
+       mapEl.children[i].classList.toggle('land', !!model.map.cells[i]);
+      updateLandCount(); save();
+    }
+
+    function randomIslands(){
+      const {w,h} = model.map;
+      model.map.cells = model.map.cells.map(()=> Math.random()<0.22 ? 1 : 0);
+      // Simple smoothing: turn isolated waters around land into land sometimes
+      for(let y=0;y<h;y++){
+        for(let x=0;x<w;x++){
+          const i=y*w+x; const n = neighbours(x,y,w,h);
+          const count = n.reduce((a,ix)=>a+(model.map.cells[ix]||0),0);
+          if(count>=4) model.map.cells[i]=1;
+        }
+      }
+    }
+    function neighbours(x,y,w,h){
+      const arr=[]; for(let dy=-1;dy<=1;dy++){ for(let dx=-1;dx<=1;dx++){ if(dx||dy){ const nx=x+dx, ny=y+dy; if(nx>=0&&ny>=0&&nx<w&&ny<h){ arr.push(ny*w+nx) } } } } return arr;
+    }
+
+    mapEl.addEventListener('mousedown', e=>{ drawDown=true; const cell=e.target.closest('.cell'); if(cell) toggleCell(+cell.dataset.i); });
+    mapEl.addEventListener('mouseover', e=>{ if(!drawDown) return; const cell=e.target.closest('.cell'); if(cell) toggleCell(+cell.dataset.i,1); });
+    window.addEventListener('mouseup', ()=> drawDown=false);
+
+    // ---------- Presenter Mode ----------
+    function presenter(on){
+      const p = $('#presenter');
+      p.classList.toggle('on', !!on);
+      p.setAttribute('aria-hidden', on? 'false':'true');
+    }
+
+    // ---------- Confetti ----------
+    function confetti(amount=60){
+      const colours = [model.flag.c1, model.flag.c2, model.flag.c3, '#ffffff'];
+      for(let i=0;i<amount;i++){
+        const d = document.createElement('div'); d.className='confetti';
+        d.style.left = Math.random()*100 + 'vw';
+        d.style.background = randOf(colours);
+        d.style.transform = `translateY(-10px) rotate(${Math.random()*360}deg)`;
+        d.style.animationDuration = 1.8 + Math.random()*1.6 + 's';
+        d.style.width = (6+Math.random()*8)+'px'; d.style.height=(8+Math.random()*10)+'px';
+        document.body.appendChild(d);
+        setTimeout(()=> d.remove(), 3000);
+      }
+    }
+
+    // ---------- Header actions ----------
+    $('#btn-present').addEventListener('click', ()=> presenter(true));
+    $('#btn-print').addEventListener('click', ()=> window.print());
+    $('#btn-reset').addEventListener('click', ()=>{
+      if(!confirm('Reset everything?')) return;
+      localStorage.removeItem('design-country-v1'); location.reload();
+    });
+
+    $('#close-present').addEventListener('click', ()=> presenter(false));
+    $('#prev-slide').addEventListener('click', ()=> alert('Tip: Use this single slide to introduce your country. (Add more slides later if you like!)'));
+    $('#next-slide').addEventListener('click', ()=> alert('Tip: Talk about your holidays and what makes your country special.'));
+
+    $('#btn-present').addEventListener('pointerenter', ()=>{ /* cute sparkle hint */});
+
+    // ---------- Boot ----------
+    load();
+    renderStepper('basics');
+    renderControls('basics');
+    renderMap();
+    sync();
+  </script>
+</body>
+</html>

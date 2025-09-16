@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en-AU" dir="ltr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Avenger Island: A Heroic Nation By Lachie Day</title>
+<meta name="description" content="A fun, Avengers-themed imaginary country project: map, flag, geography, identity, and simple design solutions." />
+
+<style>
+/* =============== Theme =============== */
+:root{
+  --ink:#0f172a; --muted:#475569; --bg:#0b1222; --panel:#0f1b31;
+  --brand:#e11d48; --brand-2:#2563eb; --brand-3:#f59e0b; --brand-4:#16a34a;
+  --paper:#f8fafc; --ring: rgba(37,99,235,.35);
+  --radius:18px; --shadow:0 12px 30px rgba(0,0,0,.25);
+  --glow:0 0 0 1px rgba(255,255,255,.04), 0 10px 40px rgba(37,99,235,.25);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;color:var(--paper);background: radial-gradient(1200px 800px at 80% -10%, #14306b 0%, var(--bg) 55%) fixed;}
+a{color:#93c5fd}
+img,svg{max-width:100%;height:auto}
+
+/* =============== Layout =============== */
+body.avenger-island{display:flex;flex-direction:column;min-height:100dvh}
+.wrap{width:min(1200px,94vw);margin-inline:auto}
+
+/* Header */
+header.hero{
+  position:sticky;top:0;z-index:50;
+  backdrop-filter: blur(10px) saturate(140%);
+  background:linear-gradient(180deg,rgba(6,12,25,.9),rgba(6,12,25,.6));
+  border-bottom:1px solid rgba(148,163,184,.18);
+}
+.hero-inner{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:center;padding:18px 8px}
+h1.title{margin:0;font-size:clamp(24px,2.8vw,40px);letter-spacing:.3px}
+.sub{margin:2px 0 0;color:#bfdbfe;font-weight:500}
+
+/* Flag card */
+.flag-card{display:flex;gap:16px;align-items:center;background:var(--panel);border:1px solid rgba(148,163,184,.18);border-radius:var(--radius);padding:14px 16px;box-shadow:var(--glow)}
+.flag{width:clamp(120px,18vw,220px);aspect-ratio:3/2;border-radius:12px;overflow:hidden;border:1px solid rgba(148,163,184,.25)}
+.badge{font-size:12px;border:1px solid rgba(148,163,184,.35);padding:2px 8px;border-radius:999px;color:#c7d2fe;background:rgba(99,102,241,.12)}
+
+/* Sections */
+section{padding:36px 0}
+section h2{font-size:clamp(22px,2.2vw,30px);margin:0 0 12px}
+section p{color:#e5e7eb;line-height:1.6;margin:10px 0}
+
+/* Grid helpers */
+.grid{display:grid;gap:18px}
+.cols-2{grid-template-columns:1.1fr .9fr}
+@media (max-width:900px){.cols-2{grid-template-columns:1fr}}
+
+/* MAP */
+.map-card{background:var(--panel);border:1px solid rgba(148,163,184,.2);border-radius:var(--radius);padding:12px;box-shadow:var(--glow)}
+.map-wrap{display:grid;grid-template-columns:1fr minmax(220px,300px);gap:16px}
+@media (max-width:1000px){.map-wrap{grid-template-columns:1fr}}
+.map-legend{background:rgba(2,6,23,.45);border:1px solid rgba(148,163,184,.2);border-radius:14px;padding:12px}
+.legend-row{display:flex;align-items:center;gap:10px;margin:6px 0;font-size:14px}
+.swatch{width:16px;height:16px;border-radius:4px;border:1px solid rgba(255,255,255,.35)}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:6px}
+
+/* Cards */
+.card{background:var(--panel);border:1px solid rgba(148,163,184,.18);border-radius:var(--radius);padding:18px;box-shadow:var(--glow)}
+.card h3{margin:0 0 8px}
+
+/* Identity bullets */
+.kv{display:grid;grid-template-columns:140px 1fr;gap:10px;padding:10px 12px;background:rgba(255,255,255,.03);border:1px solid rgba(148,163,184,.14);border-radius:12px}
+.kv b{color:#c7d2fe}
+
+/* Footer */
+footer{padding:30px 0 60px;color:#cbd5e1;text-align:center}
+
+/* Utility */
+.small{font-size:13px;color:#93c5fd}
+hr.sep{border:0;border-top:1px dashed rgba(148,163,184,.25);margin:16px 0}
+.nav{display:flex;flex-wrap:wrap;gap:10px}
+.nav a{display:inline-block;padding:6px 10px;border:1px solid rgba(148,163,184,.25);border-radius:999px;text-decoration:none}
+.nav a:hover{background:rgba(148,163,184,.12)}
+</style>
+</head>
+
+<body class="avenger-island">
+  <header class="hero">
+    <div class="wrap hero-inner">
+      <div>
+        <h1 class="title">Avenger Island</h1>
+        <p class="sub">A brand new nation discovered by <strong>Explorer <span id="explorerName">[Your Name]</span></strong></p>
+        <nav class="nav" aria-label="Section navigation">
+          <a href="#flag">Flag & Name</a>
+          <a href="#map">Map</a>
+          <a href="#identity">Identity</a>
+          <a href="#geography">Geography</a>
+          <a href="#design">Design & Infrastructure</a>
+        </nav>
+      </div>
+      <div class="flag-card">
+        <span class="badge">National Flag</span>
+        <!-- Original flag design (SVG) -->
+        <div class="flag" aria-label="Flag of Avenger Island">
+          <svg viewBox="0 0 300 200" role="img">
+            <title>Flag of Avenger Island</title>
+            <!-- Background split: hero red & arc blue -->
+            <rect width="300" height="200" fill="#0f172a"/>
+            <rect width="300" height="100" fill="#e11d48"/>
+            <rect y="100" width="300" height="100" fill="#2563eb"/>
+            <!-- Gold lightning (Thor) -->
+            <polygon points="45,10 140,10 85,90 170,90 60,190 110,110 35,110" fill="#f59e0b" opacity="0.95"/>
+            <!-- Arc reactor circle (Iron Man) -->
+            <circle cx="230" cy="100" r="48" fill="none" stroke="#93c5fd" stroke-width="10"/>
+            <circle cx="230" cy="100" r="26" fill="#0ea5e9"/>
+            <!-- White star (Cap) -->
+            <polygon points="230,64 237,92 265,92 242,108 250,136 230,120 210,136 218,108 195,92 223,92"
+                     fill="#fff"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap Avenger Island" id="content">
+    <!-- ============= FLAG & NAME ============= -->
+    <section id="flag" class="grid cols-2">
+      <article class="card">
+        <h2>Country Name & Meaning</h2>
+        <p><strong>Avenger Island</strong> is named after heroes who help people. The name reminds us to be brave and kind.</p>
+        <div class="kv"><b>Capital City</b><span><strong>Stark City</strong> (east coast)</span></div>
+        <div class="kv"><b>Motto</b><span>“Stronger Together.”</span></div>
+        <div class="kv"><b>Currency</b><span><strong>Stark Shekels (STK)</strong> — the money used in shops and on trains.</span></div>
+        <div class="kv"><b>National Animal</b><span><strong>Panthera</strong> — fast, quiet and protective.</span></div>
+      </article>
+
+      <article class="card">
+        <h2>Why these Symbols?</h2>
+        <p>The <em>lightning</em> is for Thor. The <em>blue circle</em> is for Iron Man’s power. The <em>star</em> is for Captain America. The colours red, blue and gold show hope and courage.</p>
+      </article>
+    </section>
+
+ <!-- ============= MAP (image version) ============= -->
+<section id="map">
+  <h2>Official Map of Avenger Island</h2>
+  <div class="map-card map-wrap">
+    <div>
+      <!-- Replace the src below with your image file path -->
+      <img
+        src="images/avenger-island-map.jpg"
+        alt="Hand-drawn map of Avenger Island showing mountains, rivers, cities and a compass."
+        style="width:100%;height:auto;border-radius:14px;display:block;background:#0b2545"
+      />
+      <p class="small">This is the hand-drawn map by Lachie. It shows the island shape, cities, and a compass.</p>
+    </div>
+
+    <!-- OPTIONAL: Keep this if the drawing doesn’t include a key/compass -->
+    <aside class="map-legend" aria-label="Map key">
+      <h3 style="margin:0 0 6px">Map Key</h3>
+      <div class="legend-row"><span class="swatch" style="background:#14532d"></span> Land</div>
+      <div class="legend-row"><span class="swatch" style="background:#60a5fa"></span> Rivers & Lakes</div>
+      <div class="legend-row"><span class="swatch" style="background:#e5e7eb"></span> Cold Zone (North)</div>
+      <div class="legend-row"><span class="swatch" style="background:#22c55e"></span> Temperate Zone (Centre)</div>
+      <div class="legend-row"><span class="swatch" style="background:#f59e0b"></span> Tropical Zone (South)</div>
+      <div class="legend-row"><span class="dot" style="background:#fbbf24;border:1px solid #fff"></span> Cities</div>
+      <div class="legend-row"><span class="swatch" style="background:transparent;border-style:dashed"></span> Regional Borders</div>
+      <hr class="sep">
+      <div class="legend-row">⛰ Hulk Ridge • ⛰ Jotun Peaks • ⛰ Panthera Hills</div>
+      <div class="legend-row">★ Capital: Stark City</div>
+      <p class="small">If Lachie drew a key and compass on the map, you can delete this legend box.</p>
+    </aside>
+  </div>
+</section>
+
+    <!-- ============= IDENTITY ============= -->
+    <section id="identity" class="grid cols-2">
+      <article class="card">
+        <h2>Culture</h2>
+        <p>People try to be brave, kind and fair like the Avengers. Kids like to dress up as their favourite heroes. There are parades with music and fireworks.</p>
+
+        <h2>Language</h2>
+        <p>People on Avenger Island speak English. They sometimes use hero words like “assemble” when they want everyone to come together, or “smash it” to wish someone good luck.</p>
+      </article>
+
+      <article class="card">
+        <h2>Food</h2>
+        <p>People eat shawarma (like in the movie), bagels, fruit from the farms, and honey cakes from New Asgard. Families share big meals on weekends.</p>
+
+        <h2>Clothing & Celebrations</h2>
+        <p>Everyday clothes are comfy with red, blue and gold. On special days people wear capes and star pins. The biggest party is <strong>Founders’ Day</strong> with lanterns shaped like shields, hammers, webs and panthers.</p>
+      </article>
+    </section>
+
+    <!-- ============= GEOGRAPHY ============= -->
+    <section id="geography" class="grid cols-2">
+      <article class="card">
+        <h2>Climate</h2>
+        <p>The north is cold and sometimes snowy. The middle is sunny and good for farms. The south is warm and tropical with beaches.</p>
+
+        <h2>Natural Features</h2>
+        <p>There is <strong>Hulk Ridge</strong> (big mountains), the <strong>Heartstream River</strong>, two bright <strong>Unity Lakes</strong>, the <strong>Panthera Forest</strong>, and the tall <strong>Asgard Cliffs</strong>.</p>
+      </article>
+
+      <article class="card">
+        <h2>Where People Live</h2>
+        <p>Most people live in <strong>Stark City</strong> near schools and hospitals. Some live at <strong>New Asgard Harbor</strong> to fish. Rangers live near the <strong>Panthera Preserve</strong> to look after animals.</p>
+      </article>
+    </section>
+
+    <!-- ============= INFRASTRUCTURE & DESIGN (2 needs) ============= -->
+    <section id="design" class="grid cols-2">
+      <article class="card">
+        <h2>Need 1: Energy</h2>
+        <h3>Our Solution</h3>
+        <p>We use clean power from sun, wind and waves. Big batteries near the lakes store extra power. This idea was inspired by Iron Man and Black Panther.</p>
+      </article>
+
+      <article class="card">
+        <h2>Need 2: Transport</h2>
+        <h3>Our Solution</h3>
+        <p><strong>StormRail</strong> is a fast train that goes from the mountains to the sea. In towns there are <strong>WebWays</strong> (safe bridges and bike paths) that look like Spider-Man’s webs. This helps everyone get to school, markets and beaches.</p>
+      </article>
+    </section>
+
+    <!-- ============= SHORT WRITING LINKING GEO TO LIFE ============= -->
+    <section class="card">
+      <h2>How Geography Helps Us</h2>
+      <p>The river and lakes give us water and power, so towns are close to them. The warm south is good for beaches and fruit. The flat middle makes it easy to build the train.</p>
+    </section>
+
+    <!-- ============= LORE (short + kid voice) ============= -->
+    <section class="card">
+      <h2>Hero Inspiration</h2>
+      <p><strong>Hulk</strong> = strength, <strong>Spider-Man</strong> = helping neighbours, <strong>Iron Man</strong> = inventions, <strong>Thor</strong> = courage, <strong>Captain America</strong> = fairness, <strong>Black Panther</strong> = caring for nature.</p>
+    </section>
+
+    <footer>
+      <p>© Avenger Island — Student Project. Original map and flag created for school use.</p>
+    </footer>
+  </main>
